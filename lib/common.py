@@ -7,6 +7,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import StaleElementReferenceException
+
 def login(driver, user, pw):
     time.sleep(3)
     console.log('Username: '+ user+' / Password: '+pw)
@@ -17,7 +20,7 @@ def login(driver, user, pw):
 
     username.send_keys(user, Keys.ARROW_DOWN)
     password.send_keys(pw, Keys.ARROW_DOWN)
-    driver.implicitly_wait(10)
+
     login.click()
     wait(driver, '//*[@id="hd-login-user-name"]')
 
@@ -56,6 +59,10 @@ def setup(settings):
 
 def statusReady(driver):
     count = 0
+    exception = False
+
+    xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[3]/a').click() #Refresh always
+    time.sleep(5)
     while(1):
         status = xpath(driver, '//*[@id="device-list-table-body"]/tr/td[4]/div/span[2]').text
         if(count == 1200):
@@ -63,17 +70,54 @@ def statusReady(driver):
             exit()
             
         if(status != 'Ready'):
-            xpath(driver, '//*[@id="btn-action-refresh"]/a').click()
+            xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[3]/a').click()
             console.log('Status is in '+status+'. Refreshing...')
-            time.sleep(4)
+            time.sleep(5)
         else:
             console.log('Device status: '+status)
-            break
+            try:
+                xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/a').click()
+                exception = False
+            except WebDriverException as e:
+                hasError = True
+                pass
+
+            if(exception == False): #No Exception, break the loop
+                break
+            #else continue looping until Task button is clickable
         time.sleep(3)
         count = count + 3
-    
+
+def inProgress(driver, xpath_status, xpath_detail):
+    last_detail = ''
+    while(1):
+        try:
+            #Note: Percent xpath is unstable, can't retrieve and returns timeout exception
+            status = wait(driver, xpath_status).text
+            detail = wait(driver, xpath_detail).text
+            
+            if(detail != last_detail):
+                console.log(detail)
+                last_detail = detail
+                
+            if(status == 'Successful' or status == 'Failed'):
+                console.log('Status: '+status)
+                break
+            
+        except StaleElementReferenceException as e:
+            #Exception on the WebDriverWait. Added ignore parameters for stale element.
+            #Applicable for cases that is constantly changing DOM behavior
+            pass
+        
+        
+
+        #TODO: NEED TO FILTER OTHER STATUS TEXTS for continuous testing.
+        time.sleep(1)
+
+    return status
+
 def wait(driver, xpath):
-    element = WebDriverWait(driver, 30)\
+    element = WebDriverWait(driver, 60)\
                 .until(EC.element_to_be_clickable((By.XPATH, xpath)))
     return element
 

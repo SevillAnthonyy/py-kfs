@@ -12,7 +12,7 @@ from lib import kfs
 COUNT = 1
 settings = {
     'KEEP_SCREEN_ALIVE' :True,
-    'BROWSER':          1,              # 1 = Chrome / 2 = Firefox
+    'BROWSER':          2,              # 1 = Chrome / 2 = Firefox
     'KFS_SERVER':       'https://kfs-integ15-userweb.cloudapp.net/',
     'KFS_USERNAME':     config.KFS_USER,
     'KFS_PASSWORD':     config.KFS_PW,
@@ -27,12 +27,10 @@ try:
         console.log('@@ AUTOTEST START! COUNT: '+ str(COUNT))
         # START! Main execution
         # Code from here
-        #kfs.backupdata_import(instance, COUNT)
         kfs.snapshots(instance, COUNT)
         kfs.restart_network(instance, COUNT)
         kfs.restart_device(instance, COUNT)
-        
-        
+        #kfs.backupdata_import(instance, COUNT)
 
         # Until here.
         # END Main execution
