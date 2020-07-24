@@ -28,6 +28,7 @@ try:
         # START! Main execution
         # Code from here
         kfs.snapshots(instance, COUNT)
+        kfs.fwupdate(instance, COUNT)
         kfs.restart_network(instance, COUNT)
         kfs.restart_device(instance, COUNT)
         #kfs.backupdata_import(instance, COUNT)

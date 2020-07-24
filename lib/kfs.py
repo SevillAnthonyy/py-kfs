@@ -4,6 +4,7 @@ from . import snapshots_
 from . import restart_device_
 from . import restart_network_
 from . import import_
+from . import fwupdate_
 
 def snapshots(driver, count):
     console.log('> Executing snapshots')
@@ -20,3 +21,7 @@ def restart_network(driver, count):
 def backupdata_import(driver, count):
     console.log('> Executing network restart')
     import_.execute(driver, count)
+
+def fwupdate(driver, count):
+    console.log('> Executing firmware update')
+    fwupdate_.execute(driver, count)
