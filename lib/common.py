@@ -1,6 +1,7 @@
 import pyautogui
 import time
-from lib import console
+from . import console
+from . import console
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -26,9 +27,9 @@ def login(driver, user, pw):
 
     console.log('You are logged in!')
 
-def searchDevice(driver, serialNumber):
+def searchDevice(driver, kfsServer, serialNumber):
     console.log("Searching for device "+ serialNumber +" ...")
-    driver.get('https://kfs-integ15-userweb.cloudapp.net/AdvancedSearch/List?0=serialNumber%07105%07'+serialNumber)
+    driver.get(kfsServer+'AdvancedSearch/List?0=serialNumber%07105%07'+serialNumber)
     wait(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[3]')
 
     result = xpath(driver,'/html/body/div[1]/div[1]/div/div/div/div[1]/div/span').text
@@ -54,7 +55,7 @@ def setup(settings):
     driver.get(settings['KFS_SERVER'])
 
     login(driver, settings['KFS_USERNAME'], settings['KFS_PASSWORD'])
-    searchDevice(driver, settings['SERIAL_NUMBER'])
+    searchDevice(driver, settings['KFS_SERVER'], settings['SERIAL_NUMBER'])
     return driver
 
 def statusReady(driver):
