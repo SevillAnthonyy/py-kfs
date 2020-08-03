@@ -7,6 +7,7 @@ from . import import_
 from . import fwupdate_
 from . import mnt_mode_
 from . import mnt_adjustment_
+from . import device_settings_
 
 def snapshots(driver, count):
     console.log('> Executing snapshots')
@@ -21,7 +22,7 @@ def restart_network(driver, count):
     restart_network_.execute(driver, count)
 
 def backupdata_import(driver, count):
-    console.log('> Executing network restart')
+    console.log('> Executing import backup data')
     import_.execute(driver, count)
 
 def fwupdate(driver, count):
@@ -35,3 +36,7 @@ def mnt_mode(driver, count, mode):
 def mnt_adjustment(driver, count, settings, mode):
     console.log('> Executing maintenance adjustment settings')
     mnt_adjustment_.execute(driver, count, settings, mode)
+
+def device_settings(driver, count, setting):
+    console.log('> Executing device settings')
+    device_settings_.execute(driver, count, setting)

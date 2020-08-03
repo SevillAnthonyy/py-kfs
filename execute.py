@@ -12,11 +12,11 @@ from lib import kfs
 
 COUNT = 1
 settings = {
-    'BROWSER':          2,              # 1 = Chrome / 2 = Firefox
+    'BROWSER':          1,              # 1 = Chrome / 2 = Firefox
     'KFS_SERVER':       'https://kfs-as01-userweb.cloudapp.net/',
     'KFS_USERNAME':     config.KFS_USER,
     'KFS_PASSWORD':     config.KFS_PW,
-    'SERIAL_NUMBER':    'Z2J7400003'
+    'SERIAL_NUMBER':    'Z3Z7500006'
                
 }
 
@@ -44,6 +44,8 @@ try:
         kfs.mnt_adjustment(instance, COUNT, settings, enum.MA_DEV_REF)
         
         #kfs.backupdata_import(instance, COUNT)
+
+        #kfs.device_settings(instance, COUNT, enum.COPY_FEED)
 
         ###### Until here.
         ###### END Main execution
