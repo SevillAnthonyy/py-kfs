@@ -38,7 +38,7 @@ def searchDevice(driver, kfsServer, serialNumber):
         console.log('Device found! FW Version:')
         console.log(fw_version)
         time.sleep(2) #add delay
-        xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[4]/div/table/tbody/tr/td[1]').click()
+        #xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[4]/div/table/tbody/tr/td[1]').click()
     else:
         console.log('Device not found, please check if the device is registered to KFS')
 
@@ -60,10 +60,13 @@ def setup(settings):
 
 def statusReady(driver):
     count = 0
-    exception = False
+    #exception = False
 
-    xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[3]/a').click() #Refresh always
-    time.sleep(5)
+    #Special case, to avoid ever changing css
+    driver.refresh()
+    time.sleep(3)
+    #Select device
+    xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[4]/div/table/tbody/tr/td[1]').click()
     while(1):
         status = xpath(driver, '//*[@id="device-list-table-body"]/tr/td[4]/div/span[2]').text
         if(count == 1200):
@@ -73,25 +76,19 @@ def statusReady(driver):
         if(status != 'Ready'):
             xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[3]/a').click()
             console.log('Status is in '+status+'. Refreshing...')
-            time.sleep(5)
+            #time.sleep(5)
         else:
             console.log('Device status: '+status)
-            try:
-                xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/a').click()
-                exception = False
-            except WebDriverException as e:
-                hasError = True
-                pass
-
-            if(exception == False): #No Exception, break the loop
-                break
-            #else continue looping until Task button is clickable
+            time.sleep(3)
+            #Click tasks
+            xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/a').click()
+            break
         time.sleep(3)
         count = count + 3
 
 def inProgress(driver, xpath_status, xpath_detail):
     last_detail = ''
-    while(1):
+    while True:
         try:
             #Note: Percent xpath is unstable, can't retrieve and returns timeout exception
             status = wait(driver, xpath_status).text
@@ -101,7 +98,7 @@ def inProgress(driver, xpath_status, xpath_detail):
                 console.log(detail)
                 last_detail = detail
                 
-            if(status == 'Successful' or status == 'Failed'):
+            if(status == 'Successful' or status == 'Failed' or status == 'Completed'):
                 console.log('Status: '+status)
                 break
             
@@ -124,5 +121,9 @@ def wait(driver, xpath):
 
 def xpath(driver, xpath):
     wait(driver,xpath)
-    result = driver.find_element_by_xpath(xpath)
-    return result
+    element = driver.find_element_by_xpath(xpath)
+    return element
+
+def count(driver, xpath):
+    cnt = len(driver.find_elements_by_xpath(xpath))
+    return cnt

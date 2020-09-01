@@ -8,9 +8,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-def execute(driver, count, settings, mode):
-    SERIAL_NUM = settings['SERIAL_NUMBER']
-    KFS_SERVER = settings['KFS_SERVER']
+from selenium.common.exceptions import TimeoutException
+
+def execute(driver, count, mode):
+    SERIAL_NUM = enum.settings['SERIAL_NUMBER']
+    KFS_SERVER = enum.settings['KFS_SERVER']
+    hasError = False
+    
     #check if device is ready to perform event
     common.statusReady(driver)
     
@@ -21,15 +25,22 @@ def execute(driver, count, settings, mode):
 
     # 1 / 4
     console.log('Adjustment mode: '+ mode)
-    if(mode == enum.MA_LSU):
-        common.xpath(driver, '//*[@id="maintenande-mode-method-action1-rbtn"]/span[1]').click()
-    elif(mode == enum.MA_CALIB):
-        common.xpath(driver, '//*[@id="maintenande-mode-method-action2-rbtn"]/span[1]').click()
-    elif(mode == enum.MA_DRUM_REF):
-        common.xpath(driver, '//*[@id="maintenande-mode-method-action3-rbtn"]/span[1]').click()
-    elif(mode == enum.MA_DEV_REF):
-        common.xpath(driver, '//*[@id="maintenande-mode-method-action4-rbtn"]/span[1]').click()
-
+    try:
+        if(mode == enum.MA_LSU):
+            common.xpath(driver, '//*[@id="maintenande-mode-method-action1-rbtn"]/span[1]').click()
+        elif(mode == enum.MA_CALIB):
+            common.xpath(driver, '//*[@id="maintenande-mode-method-action2-rbtn"]/span[1]').click()
+        elif(mode == enum.MA_DRUM_REF):
+            common.xpath(driver, '//*[@id="maintenande-mode-method-action3-rbtn"]/span[1]').click()
+        elif(mode == enum.MA_DEV_REF):
+            common.xpath(driver, '//*[@id="maintenande-mode-method-action4-rbtn"]/span[1]').click()
+    except TimeoutException as e:
+        console.log('ERR! Action not found')
+        hasError = True
+        pass
+    if(hasError == True):
+        return
+    
     common.xpath(driver, '//*[@id="adjust-mmode-actions-wizard-next-btn"]').click()
 
     # 2 / 4
@@ -58,3 +69,6 @@ def execute(driver, count, settings, mode):
     #Go back to original page
     driver.implicitly_wait(10) # seconds
     driver.get(KFS_SERVER+'AdvancedSearch/List?0=serialNumber%07105%07'+SERIAL_NUM)
+
+    #Select device again
+    common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[4]/div/table/tbody/tr/td[1]').click()

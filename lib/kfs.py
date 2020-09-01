@@ -7,6 +7,7 @@ from . import import_
 from . import fwupdate_
 from . import mnt_mode_
 from . import mnt_adjustment_
+from . import panel_note_
 
 def snapshots(driver, count):
     console.log('> Executing snapshots')
@@ -28,10 +29,15 @@ def fwupdate(driver, count):
     console.log('> Executing firmware update')
     fwupdate_.execute(driver, count)
 
-def mnt_mode(driver, count, mode):
+def mnt_mode(driver, count, mode, mm_type):
     console.log('> Executing maintenance mode')
-    mnt_mode_.execute(driver, count, mode)
+    mnt_mode_.execute(driver, count, mode, mm_type)
 
-def mnt_adjustment(driver, count, settings, mode):
+def mnt_adjustment(driver, count, mode):
     console.log('> Executing maintenance adjustment settings')
-    mnt_adjustment_.execute(driver, count, settings, mode)
+    mnt_adjustment_.execute(driver, count, mode)
+
+def panel_note(driver, count):
+    console.log('> Executing panel note')
+    panel_note_.execute(driver, count)
+
