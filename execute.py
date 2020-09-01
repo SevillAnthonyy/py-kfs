@@ -8,8 +8,6 @@ from lib import console
 from lib import common
 from lib import kfs
 
-
-
 COUNT = 1
 
 print("Press Ctrl-C on the command line to terminate the autotest \n\n")
@@ -49,6 +47,8 @@ try:
         #kfs.mnt_adjustment(instance, COUNT, enum.MA_DEV_REF)
         
         #kfs.backupdata_import(instance, COUNT)
+
+        #kfs.device_settings(instance, COUNT, enum.COPY_FEED)
 
         ###### Until here.
         ###### END Main execution
