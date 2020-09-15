@@ -8,6 +8,8 @@ settings = {
     'SERIAL_NUMBER':    'Z3Z7500006'
     # 2V6: Z3Z7500006
     # 2L6: NPB3400044
+    # 2V6: NPB3400044
+    # 2L6: Z3Z7500006
     # 2V5: ZZV7300008
 }
 
@@ -48,23 +50,23 @@ MA_DEV_REF      = 'Developer refresh'
 
 
 #Device Settings
-COMMON         = 'common'
-COPY_DENSITY   = 'copy density'
-COPY_FEED      = 'copy feed'
-DATE_AND_TIME  = 'date and time'
-EMAIL_ADD      = 'email address'
-EMAIL_REPORT   = 'email report'
-EMAIL_SMTP     = 'email smtp'
-ENHANCED_WSD   = 'enahnced wsd'
-FAX_REPORT     = 'fax report'
-IPV4           = 'ipv4'
-MEDIA_INPUT    = 'media input'
-MEDIA_TYPE     = 'media type'
-OUTPUT         = 'output'
-OUTPUT_DEFAULT = 'output default'
-POWER_OFF      = 'power off'
-SCAN           = 'scan'
-SECURITY       = 'security'
-SLEEP          = 'sleep'
-TIMER          = 'timer'
-WEEKLY_TIMER   = 'weekly timer'
+COMMON         = 'Common'                   #OK
+COPY_DENSITY   = 'Copy Density'             #OK
+COPY_FEED      = 'Copy Feed'                #OK
+DATE_AND_TIME  = 'Date and Time'            #OK
+EMAIL_ADD      = 'Email Address'            #OK
+EMAIL_REPORT   = 'Email Report'             #OK
+EMAIL_SMTP     = 'Email SMTP'               #OK
+ENHANCED_WSD   = 'Enhanced WSD'             #OK
+FAX_REPORT     = 'FAX Advance Report'       #OK
+IPV4           = 'IPV4'                     #NG
+MEDIA_INPUT    = 'Media Input'              #OK
+MEDIA_TYPE     = 'Media Type'               #OK
+OUTPUT         = 'Output'                   #OK
+OUTPUT_DEFAULT = 'Output Default'           #OK
+POWER_OFF      = 'Power Off'                #NG
+SCAN           = 'Scan'                     #OK
+SLEEP_LEVEL    = 'Sleep Level'              #OK
+SECURITY       = 'Security'                 #OK
+TIMER          = 'Timer'                    #OK
+WEEKLY_TIMER   = 'Weekly Timer'             #OK
