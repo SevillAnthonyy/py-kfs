@@ -60,7 +60,7 @@ def setup(settings):
 
 def statusReady(driver):
     count = 0
-    #exception = False
+    pyautogui.press('numlock') #Keep screen alive. // Prevent lockscreen
 
     #Special case, to avoid ever changing css
     driver.refresh()
@@ -81,7 +81,7 @@ def statusReady(driver):
             time.sleep(3)
             #Select device
             xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[4]/div/table/tbody/tr/td[1]').click()
-            
+            time.sleep(1)
             #Click tasks
             xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/a').click()
             break
@@ -118,6 +118,15 @@ def inProgress(driver, xpath_status, xpath_detail):
         time.sleep(1)
 
     return status
+
+def isLoading(driver, xpath):
+    WebDriverWait(driver, SHORT_TIMEOUT
+        ).until(EC.presence_of_element_located((By.XPATH, xpath)))
+
+    # then wait for the element to disappear
+    WebDriverWait(driver, LONG_TIMEOUT
+        ).until_not(EC.presence_of_element_located((By.XPATH, xpath)))
+
 
 def wait(driver, xpath):
     element = WebDriverWait(driver, 60)\

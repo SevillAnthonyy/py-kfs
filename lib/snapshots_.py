@@ -16,9 +16,9 @@ def execute(driver, count):
 
     # 1/4
     #common.xpath(driver, '//*[@id="7"]').click()
-    #common.xpath(driver, '//*[@id="1"]').click()
-    #common.xpath(driver, '//*[@id="2"]').click()
-    #common.xpath(driver, '//*[@id="3"]').click()
+    common.xpath(driver, '//*[@id="4"]').click()
+    common.xpath(driver, '//*[@id="5"]').click()
+    common.xpath(driver, '//*[@id="6"]').click()
     
     #next
     common.xpath(driver, '//*[@id="retrieve-snapshots-wizard-modal-next-btn"]').click()

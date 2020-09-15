@@ -5,9 +5,9 @@ settings = {
     'KFS_SERVER':       'https://kfs-as01-userweb.cloudapp.net/',
     'KFS_USERNAME':     config.KFS_USER,
     'KFS_PASSWORD':     config.KFS_PW,
-    'SERIAL_NUMBER':    'NPB3400044'
-    # 2V6: NPB3400044
-    # 2L6: Z3Z7500006
+    'SERIAL_NUMBER':    'Z3Z7500006'
+    # 2V6: Z3Z7500006
+    # 2L6: NPB3400044
     # 2V5: ZZV7300008
 }
 

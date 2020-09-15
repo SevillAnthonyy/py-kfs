@@ -33,8 +33,8 @@ def set(driver, mode, mm_type):
             if(mode_val == 'Mode 0'):
                 common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li[1]/div/div/ul/li[2]/a').click()
             elif(mode_val == 'Mode 1'):
-                common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li[1]/div/div/ul/li[3]/a').click()
-            elif(mode_val == 'Mode 2'):
+                common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li[1]/div/div/ul/li[1]/a').click()
+            else:
                 common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li[1]/div/div/ul/li[1]/a').click()
             upperlimit_val = common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li[2]/div/div/input').get_attribute('value')
             if(upperlimit_val != '2'):#Max value
