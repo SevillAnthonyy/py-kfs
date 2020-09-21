@@ -15,10 +15,12 @@ def execute(driver, count):
     common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/div/ul/li[5]/a').click()
 
     # 1/4
-    #common.xpath(driver, '//*[@id="7"]').click()
-    common.xpath(driver, '//*[@id="4"]').click()
-    common.xpath(driver, '//*[@id="5"]').click()
-    common.xpath(driver, '//*[@id="6"]').click()
+    common.xpath(driver, '//*[@id="7"]').click()
+    common.xpath(driver, '//*[@id="1"]').click()
+    common.xpath(driver, '//*[@id="2"]').click()
+    common.xpath(driver, '//*[@id="3"]').click()
+    #common.xpath(driver, '//*[@id="4"]').click()
+    #common.xpath(driver, '//*[@id="5"]').click()
     
     #next
     common.xpath(driver, '//*[@id="retrieve-snapshots-wizard-modal-next-btn"]').click()

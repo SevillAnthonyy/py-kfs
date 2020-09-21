@@ -13,7 +13,6 @@ from selenium.common.exceptions import TimeoutException
 def execute(driver, count, mode):
     SERIAL_NUM = enum.settings['SERIAL_NUMBER']
     KFS_SERVER = enum.settings['KFS_SERVER']
-    hasError = False
     
     #check if device is ready to perform event
     common.statusReady(driver)
@@ -36,10 +35,12 @@ def execute(driver, count, mode):
             common.xpath(driver, '//*[@id="maintenande-mode-method-action4-rbtn"]/span[1]').click()
     except TimeoutException as e:
         console.log('ERR! Action not found')
-        hasError = True
+        #Go back to original page
+        driver.implicitly_wait(10) # seconds
+        driver.get(KFS_SERVER+'AdvancedSearch/List?0=serialNumber%07105%07'+SERIAL_NUM)
         pass
-    if(hasError == True):
         return
+        
     
     common.xpath(driver, '//*[@id="adjust-mmode-actions-wizard-next-btn"]').click()
 

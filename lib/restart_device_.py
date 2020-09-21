@@ -37,3 +37,4 @@ def execute(driver, count):
     #TODO: NEED TO FILTER OTHER STATUS TEXTS for continuous testing.
     common.xpath(driver, '//*[@id="restart-progress-close-btn"]').click()
     
+    time.sleep(5) #Add delay since device is booting up and reconnecting to network.
