@@ -24,6 +24,9 @@ U147 = 'U147 Set Toner Apply Mode'              #OK
 U148 = 'U148 Set Drum Refresh Mode'             #OK
 U250 = 'U250 Set Maintenance Counter Preset'    #OK - To confirm, firmware extensions cass1 cass2
 U251 = 'U251 Clear Maintenance Counter'         #OK - To confirm, firmware extensions cass1 cass2
+U326 = 'U326 Set Black Line Clean Display'      #OK
+U327 = 'U327 Set Cassette Heater Control'       #OK
+U332 = 'U332 Adjust Coverage Size Calculation Rate'       #OK
 
 ## MM Type actions only
 U600 = 'U600 Initialize: All Data'              #OK
@@ -35,7 +38,7 @@ U904 = 'U904 Clear Service Call Counter'        #OK
 U906 = 'U906 Reset Disable Function Mode'       #NG
 U910 = 'U910 Clear Coverage Data'               #OK
 
-MM_CUSTOM_INPUTS = [U136, U147, U148, U250, U251, U464, U474, U600, U601]
+MM_CUSTOM_INPUTS = [U136, U147, U148, U250, U251, U326, U327, U464, U474, U600, U601]
 
 ## Maintenance adjustment settings
 MA_LSU          = 'Laser scanner cleaning'

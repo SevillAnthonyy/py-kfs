@@ -18,11 +18,12 @@ try:
         ###### START! Main execution
         ###### Code from here
 
+        kfs.backupdata_import(instance, COUNT)
         #kfs.panel_note(instance, COUNT)
-        #kfs.snapshots(instance, COUNT)
+        kfs.snapshots(instance, COUNT)
         #kfs.fwupdate(instance, COUNT)
         kfs.restart_network(instance, COUNT)
-        #kfs.restart_device(instance, COUNT)
+        kfs.restart_device(instance, COUNT)
 
         ##Maintenance mode. Check lib/enum.py for the list of mnt mode to execute
         
@@ -30,7 +31,10 @@ try:
         #kfs.mnt_mode(instance, COUNT, enum.U147, enum.TYPE_SETTING)
         #kfs.mnt_mode(instance, COUNT, enum.U148, enum.TYPE_SETTING)
         #kfs.mnt_mode(instance, COUNT, enum.U250, enum.TYPE_SETTING)
-        kfs.mnt_mode(instance, COUNT, enum.U251, enum.TYPE_SETTING)
+        #kfs.mnt_mode(instance, COUNT, enum.U251, enum.TYPE_SETTING)
+        kfs.mnt_mode(instance, COUNT, enum.U326, enum.TYPE_SETTING)
+        kfs.mnt_mode(instance, COUNT, enum.U327, enum.TYPE_SETTING)
+        kfs.mnt_mode(instance, COUNT, enum.U332, enum.TYPE_SETTING)
         #kfs.mnt_mode(instance, COUNT, enum.U464, enum.TYPE_ACTION)
         #kfs.mnt_mode(instance, COUNT, enum.U464, enum.TYPE_SETTING)
         #kfs.mnt_mode(instance, COUNT, enum.U474, enum.TYPE_ACTION)
@@ -44,12 +48,12 @@ try:
         
         
         ##Maintenance mode adjustment settings
-        kfs.mnt_adjustment(instance, COUNT, enum.MA_LSU)
+        #kfs.mnt_adjustment(instance, COUNT, enum.MA_LSU)
         #kfs.mnt_adjustment(instance, COUNT, enum.MA_CALIB)
         #kfs.mnt_adjustment(instance, COUNT, enum.MA_DRUM_REF)
         #kfs.mnt_adjustment(instance, COUNT, enum.MA_DEV_REF)
         
-        #kfs.backupdata_import(instance, COUNT)
+        
 
         #kfs.device_settings(instance, COUNT, enum.COPY_FEED)
 

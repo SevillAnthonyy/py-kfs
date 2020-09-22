@@ -67,8 +67,8 @@ def statusReady(driver):
     time.sleep(3)
     while(1):
         status = xpath(driver, '//*[@id="device-list-table-body"]/tr/td[4]/div/span[2]').text
-        if(count == 1200):
-            console.log('Error timeout! already 20 mins has passed and the device is not in Ready status')
+        if(count == 7200):
+            console.log('Error timeout! already 120 mins has passed and the device is not in Ready status')
             exit()
             
         if(status == 'Offline' or status == 'Error'):

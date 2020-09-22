@@ -22,7 +22,7 @@ def set(driver, mode, mm_type):
                     common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li['+str(x)+']/div/div/div/a[1]').click()
                 else:
                     common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li['+str(x)+']/div/div/div/a[2]').click()
-        #elif(mm_type == enum.TYPE_ACTION): #no action type setting
+        #elif(mm_type == enum.TYPE_ACTION): #no TYPE_ACTION
 #########################################
 ## U147 = 'U147 Set Toner Apply Mode'
     elif(mode == enum.U147):
@@ -46,7 +46,7 @@ def set(driver, mode, mm_type):
                 common.xpath(driver,'/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li[3]/div/div/div/a[1]').click()
             else:
                 common.xpath(driver,'/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li[3]/div/div/div/a[2]').click()
-        #elif(mm_type == enum.TYPE_ACTION): #no action type setting
+        #elif(mm_type == enum.TYPE_ACTION): #no TYPE_ACTION
 #########################################
 ## U148 = 'U148 Set Drum Refresh Mode'
     elif(mode == enum.U148):
@@ -60,7 +60,7 @@ def set(driver, mode, mm_type):
                     common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li['+str(x)+']/div/div/div/a[1]').click()
                 else:
                     common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li['+str(x)+']/div/div/div/a[2]').click()
-        #elif(mm_type == enum.TYPE_ACTION): #no action type setting
+        #elif(mm_type == enum.TYPE_ACTION): #no TYPE_ACTION
 ##################################################
 ## U250 = 'U250 Set Maintenance Counter Preset'
 ## U251 = 'U251 Clear Maintenance Counter'
@@ -75,7 +75,36 @@ def set(driver, mode, mm_type):
                     common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li['+str(x)+']/div/div/div/a[1]').click()
                 else: #Decrement
                     common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li['+str(x)+']/div/div/div/a[2]').click()       
-        #elif(mm_type == enum.TYPE_ACTION): #No custom inputs
+        #elif(mm_type == enum.TYPE_ACTION): #no TYPE_ACTION
+#########################################
+## U326 = 'U326 Set Black Line Clean Display'
+    elif(mode == enum.U326):
+        if(mm_type == enum.TYPE_SETTING):
+            common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li/div/label/span[1]').click()
+        #elif(mm_type == enum.TYPE_ACTION): #no action
+#########################################
+## U327 = 'U327 Set Cassette Heater Control'
+    elif(mode == enum.U327):
+        if(mm_type == enum.TYPE_SETTING):
+            val = common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li/div/div/button/div').text
+            common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li/div/div/button').click()
+            if(val == 'Off'):
+                common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li/div/div/ul/li[1]/a').click()
+            else:
+                common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/ul/li/div/div/ul/li[2]/a').click()
+                
+        #elif(mm_type == enum.TYPE_ACTION): #no action
+#########################################
+## U332 = 'U332 Adjust Coverage Size Calculation Rate'
+    elif(mode == enum.U327):
+        if(mm_type == enum.TYPE_SETTING):
+            inp_val = common.xpath(driver, '//*[@id="panel-holder"]/ul/li/div/div/input').get_attribute('value')
+            val = int(inp_val) % 2
+            if(val == 3):
+                common.xpath(driver, '//*[@id="panel-holder"]/ul/li/div/div/div/a[2]/span').click()
+            else:
+                common.xpath(driver, '//*[@id="panel-holder"]/ul/li/div/div/div/a[1]/span').click()
+        #elif(mm_type == enum.TYPE_ACTION): #no action
 #########################################
 ## U464 = 'U464 Set ID Adjustment Mode'
     elif(mode == enum.U464):
@@ -104,7 +133,7 @@ def set(driver, mode, mm_type):
                 common.xpath(driver, '//*[@id="panel-holder"]/ul/li/div/div/div/div/div/div/a[1]').click()
             else:
                 common.xpath(driver, '//*[@id="panel-holder"]/ul/li/div/div/div/div/div/div/a[2]').click()
-        #elif(mm_type == enum.TYPE_ACTION): #No custom inputs
+        #elif(mm_type == enum.TYPE_ACTION): #no TYPE_ACTION
 #########################################
 ## U600 = 'U600 Initialize: All Data'
 ## U601 = 'U601 Initialize: Keep Data'
@@ -116,4 +145,4 @@ def set(driver, mode, mm_type):
                 common.xpath(driver, '//*[@id="panel-holder"]/ul/li/div[2]/div[1]/div/div/div/a[1]').click()
             else:
                 common.xpath(driver, '//*[@id="panel-holder"]/ul/li/div[2]/div[1]/div/div/div/a[2]').click()
-        #elif(mm_type == enum.TYPE_SETTING): #No custom inputs
+        #elif(mm_type == enum.TYPE_SETTING): #no TYPE_SETTING
