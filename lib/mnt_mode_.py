@@ -23,30 +23,27 @@ def execute(driver, count, mode, mm_type):
     #Task
     common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/div/ul/li[3]/a').click()
     console.log(mode)
-
+    
+    # 1 / 5
     # Determine if maintenance mode type is Action or Settings
     if(mm_type == enum.TYPE_SETTING):
         common.xpath(driver, '//*[@id="maintenance-mode-edit-settings-rbtn"]').click()
     #else do nothing, since default value is in Actions
-        
-    # 1 / 5
+    
     mm_search = common.xpath(driver, '//*[@id="maintenance-mode-edit-02"]/div[1]/div[2]/div[2]/div/available-settings-selector/table/tbody/tr/td[2]/div[1]/input')
     mm_search.send_keys(UXXX, Keys.ARROW_DOWN)
     mm_search.send_keys(Keys.ENTER)
 
-    opt_exist = True
     try:
         common.xpath(driver, '//*[@id="setting-select-all-anchor"]').click()
     except WebDriverException as e:
-        opt_exist = False
         console.log('ERR!! MM does not exist in type ['+mm_type+']')
         console.log('Please check the device mm features')
+        common.xpath(driver, '//*[@id="maintenance-mode-wizard-modal-prev-btn"]').click()
+        common.xpath(driver, '//*[@id="maintenance-mode-wizard-popup-ok-btn"]').click()
         pass
+        return
 
-    if(opt_exist == False):
-       common.xpath(driver, '//*[@id="maintenance-mode-wizard-modal-prev-btn"]').click()
-       common.xpath(driver, '//*[@id="maintenance-mode-wizard-popup-ok-btn"]').click()
-       return
     #next
     common.xpath(driver, '//*[@id="maintenance-mode-wizard-modal-next-btn"]').click()
     
