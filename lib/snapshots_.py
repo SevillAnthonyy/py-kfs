@@ -15,12 +15,9 @@ def execute(driver, count):
     common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/div/ul/li[5]/a').click()
 
     # 1/4
-    #common.xpath(driver, '//*[@id="7"]').click()
-    #common.xpath(driver, '//*[@id="1"]').click()
-    #common.xpath(driver, '//*[@id="2"]').click()
-    #common.xpath(driver, '//*[@id="3"]').click()
-    common.xpath(driver, '//*[@id="5"]').click()
-    common.xpath(driver, '//*[@id="6"]').click()
+    for x in range (7):
+        x = x + 1 #Index starts at 0
+        isSelected(driver, x)
     
     #next
     common.xpath(driver, '//*[@id="retrieve-snapshots-wizard-modal-next-btn"]').click()
@@ -48,4 +45,27 @@ def execute(driver, count):
     #TODO: NEED TO FILTER OTHER STATUS TEXTS for continuous testing.
     common.xpath(driver, '//*[@id="progress-modal-close-btn"]').click()
     
-    
+
+#Special case Page 1 / 5
+def isSelected(driver, index):
+    xpath = '//*[@id="'+str(index)+'"]'
+
+    try:
+        WebDriverWait(driver, 5)\
+            .until(EC.element_to_be_clickable((By.XPATH, xpath)))
+        element = driver.find_element_by_xpath(xpath)
+        
+        cb = element.get_attribute("class")
+
+        # Check only the following:
+        # 1 - Status Page / 2 - Service Status / 3 - Network / 4 - Maintenance Report
+        if (index == 1 or index == 2 or index == 3  or index == 4): 
+            if cb.find('checked') != -1:
+                common.xpath(driver, xpath) # DO NOTHING
+            else:
+                element.click()
+        else:
+            if cb.find('checked') != -1:
+                element.click()
+    except Exception as e:
+        pass

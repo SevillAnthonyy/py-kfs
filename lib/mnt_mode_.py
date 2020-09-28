@@ -22,7 +22,6 @@ def execute(driver, count, mode, mm_type):
 
     #Task
     common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/div/ul/li[3]/a').click()
-    console.log(mode)
     
     # 1 / 5
     # Determine if maintenance mode type is Action or Settings

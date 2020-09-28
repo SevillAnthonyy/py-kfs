@@ -2,10 +2,10 @@ from . import config
 
 settings = {
     'BROWSER':          1,              # 1 = Chrome / 2 = Firefox
-    'KFS_SERVER':       'https://kfs-as01-userweb.cloudapp.net/',
-    'KFS_USERNAME':     config.KFS_USER,
-    'KFS_PASSWORD':     config.KFS_PW,
-    'SERIAL_NUMBER':    'Z427500003'
+    'KFS_SERVER':       'https://kfs-integ15-userweb.cloudapp.net/',
+    'KFS_USERNAME':     'SD21_RMNT',
+    'KFS_PASSWORD':     'Kyoceramita_1',
+    'SERIAL_NUMBER':    'Z3T7500004'
 }
 
 #TODO: MM settings that are dependent to device settings. E.G Cassettes / Mono Colored MFPs, etc
