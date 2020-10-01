@@ -10,6 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import NoSuchWindowException
 
 def login(driver, user, pw):
     time.sleep(3)
@@ -66,7 +67,12 @@ def statusReady(driver):
     driver.refresh()
     time.sleep(3)
     while(1):
-        status = xpath(driver, '//*[@id="device-list-table-body"]/tr/td[4]/div/span[2]').text
+        try:
+            status = xpath(driver, '//*[@id="device-list-table-body"]/tr/td[4]/div/span[2]').text
+        except NoSuchWindowException as e:
+            # Aw snap occured, browser crashed. recover page
+            driver.refresh()
+            time.sleep(10)
         if(count == 7200):
             console.log('Error timeout! already 120 mins has passed and the device is not in Ready status')
             exit()
