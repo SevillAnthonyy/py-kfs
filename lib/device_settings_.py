@@ -1,5 +1,6 @@
 import time
 import random
+import re
 from . import common
 from . import console
 from lib import enum
@@ -17,22 +18,27 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 
 def execute(driver, count, setting):
-    #check if device is ready to perform event
-    common.statusReady(driver)
-    
-    #Task
-    common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/a').click()
-    common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/div/ul/li[2]/a').click()
-    
-    # 1 / 5
-    search = common.xpath(driver, '//*[@id="device-setting-single-edit2"]/table/tbody/tr/td/div[2]/settings-selector/table/tbody/tr/td[2]/div[1]/input')
-    search.send_keys(setting, Keys.ARROW_DOWN)
-    common.xpath(driver, '//*[@id="device-setting-single-edit2"]/table/tbody/tr/td/div[2]/settings-selector/table/tbody/tr/td[2]/div[1]/button').click()
+    try:
+        #check if device is ready to perform event
+        common.statusReady(driver)
+        
+        #Task
+        common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/a').click()
+        common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/div/ul/li[2]/a').click()
+        
+        # 1 / 5
+        search = common.xpath(driver, '//*[@id="device-setting-single-edit2"]/table/tbody/tr/td/div[2]/settings-selector/table/tbody/tr/td[2]/div[1]/input')
+        search.send_keys(setting, Keys.ARROW_DOWN)
+        common.xpath(driver, '//*[@id="device-setting-single-edit2"]/table/tbody/tr/td/div[2]/settings-selector/table/tbody/tr/td[2]/div[1]/button').click()
+
+    except TimeoutException as e:
+        console.log('***Halting... Process takes too long to complete.***')
+        pass
+        return
 
     #Check if the device setting is applicable on the device
     try:
         common.xpath(driver, '//*[@id="available-settings"]/li/div/label').click()
-        time.sleep(3)
     except Exception as e:
         console.log('***' + setting + ' setting is not applicable on the device.')
         pass
@@ -42,10 +48,8 @@ def execute(driver, count, setting):
 
     # 2 / 5
     try:
-        time.sleep(10)
         common.xpath(driver, '//*[@id="single-edit-settings-dropdown"]/button').click()
     except TimeoutException as e:
-        time.sleep(60)
         console.log('***Unable to retrieve required information from the device.***')
         common.xpath(driver, '//*[@id="custom-btn-ok"]/a').click()
         pass
@@ -103,7 +107,6 @@ def execute(driver, count, setting):
     # 4 / 5
     taskname = common.xpath(driver, '//*[@id="device-setting-single-edit-task-input"]')
     taskname.send_keys('RMNT Autotest: count = '+ str(count), Keys.ARROW_DOWN)
-    time.sleep(3)
     common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
 
     # 5 / 5
@@ -120,7 +123,6 @@ def execute(driver, count, setting):
         console.log('***Process takes too long to complete.***')
         pass
         return
-    time.sleep(10)
     common.xpath(driver, '//*[@id="device-setting-single-edit-progress-close-btn"]').click()
 
 
@@ -168,8 +170,17 @@ def dropdown_selection(driver,
     options[index].click()
     time.sleep(3)
 
+#returns a list containing the range of accepted values
+#range[0] is the min and range[1] is the max
+def get_range(driver, error_msg_xpath):
+    error_element = driver.find_element_by_xpath(error_msg_xpath)
+    error_msg = driver.execute_script("return arguments[0].innerHTML", error_element)
+    range = [int(d) for d in re.findall(r'-?\d+', error_msg)]
     
-def common_settings(driver): #insert try except
+    return range
+
+
+def common_settings(driver):
     try:
         common.xpath(driver, '//*[@id="droplist-11"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div', '//*[@id="droplist-11"]/ul')
@@ -180,9 +191,9 @@ def common_settings(driver): #insert try except
         low_toner = common.xpath(driver, '//*[@id="droplist-12"]/button/div').text
         
         if(low_toner == "On"):
-            change_input(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[4]/div/div/input', 5, 100)
+            range = get_range(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[4]/div/ul/li/span[2]')
+            change_input(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[4]/div/div/input', range[0], range[1])
         
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
 
     except Exception as e:
@@ -198,18 +209,20 @@ def timer(driver, count):
     else:
         common.xpath(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[1]/div/div/div[1]/a[2]').click()
 
-    time.sleep(3)
     common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
 
 
 def copy_density(driver):
     try:
-        change_input(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li/div/div/input', -3, 3)
-        time.sleep(3)
+        range = get_range(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li/div/ul/li/span[2]')
+        change_input(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li/div/div/input', range[0], range[1])
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
+        
     except Exception as e:
+        console.log(e)
         console.log('***Copy density settings takes too much time to complete.***')
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-hide-btn"]').click()
+        #if are you sure dialog pops up, just click ok
         pass
         return
 
@@ -218,7 +231,6 @@ def copy_feed(driver):
     try:
         common.xpath(driver, '//*[@id="droplist-11"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div','//*[@id="droplist-11"]/ul')
-        time.sleep(5)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
     except Exception as e:
         console.log('***Copy feed settings takes too much time to complete.***')
@@ -233,7 +245,6 @@ def date_time(driver):
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div','//*[@id="droplist-11"]/ul')
         common.xpath(driver, '//*[@id="droplist-12"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-12"]/button/div', '//*[@id="droplist-12"]/ul')
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
     except Exception as e:
         console.log('***Date time settings takes too much time to complete.***')
@@ -245,7 +256,6 @@ def date_time(driver):
 def email_address(driver):
     try:
         common.xpath(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[1]/div/div/div[1]/a[1]').click()
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
     except Exception as e:
         console.log('***Copy density settings takes too much time to complete.***')
@@ -261,7 +271,6 @@ def email_report(driver):
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div','//*[@id="droplist-11"]/ul')
         common.xpath(driver, '//*[@id="droplist-12"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-12"]/button/div','//*[@id="droplist-12"]/ul')
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
     except Exception as e:
         console.log('***Email report settings takes too much time to complete.***')
@@ -272,8 +281,8 @@ def email_report(driver):
 
 def email_smtp(driver):
     try:
-        change_input(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[4]/div/div/input', 5, 180)
-        time.sleep(3)
+        range = get_range(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[4]/div/ul/li/span[2]')
+        change_input(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[4]/div/div/input', range[0], range[1])
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
     except Exception as e:
         console.log('***Email report settings takes too much time to complete.***')
@@ -284,18 +293,13 @@ def email_smtp(driver):
 
 def enhanced_wsd(driver):
     try:
-        time.sleep(60)
         common.xpath(driver, '//*[@id="droplist-11"]/button').click()
-        time.sleep(3)
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div','//*[@id="droplist-11"]/ul')
-        time.sleep(3)
         common.xpath(driver, '//*[@id="droplist-12"]/button').click()
-        time.sleep(3)
         dropdown_selection(driver, '//*[@id="droplist-12"]/button/div','//*[@id="droplist-12"]/ul')
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
-        time.sleep(3)
         common.xpath(driver, '//*[@id="confirm-restart-dialog-ok-btn"]').click()
-        time.sleep(60)
+        
     except Exception as e:
         console.log('***Enhanced WSD settings takes too much time to complete.***')
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-hide-btn"]').click()
@@ -307,7 +311,6 @@ def fax_report(driver):
     try:
         common.xpath(driver, '//*[@id="droplist-11"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div','//*[@id="droplist-11"]/ul')
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
     except Exception as e:
         console.log('***FAX advanced report settings takes too much time to complete.***')
@@ -319,7 +322,6 @@ def ipv4(driver):
     try:
         common.xpath(driver, '//*[@id="droplist-20"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-20"]/button/div','//*[@id="droplist-20"]/ul')
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
     except Exception as e:
         console.log('***IPV4 settings takes too much time to complete.***')
@@ -336,7 +338,6 @@ def media_input(driver):
         dropdown_selection(driver, '//*[@id="droplist-12"]/button/div', '//*[@id="droplist-12"]/ul')
         common.xpath(driver, '//*[@id="droplist-13"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-13"]/button/div', '//*[@id="droplist-13"]/ul')
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
     except Exception as e:
         console.log('***Media input settings takes too much time to complete.***')
@@ -349,7 +350,6 @@ def media_type(driver):
     try:
         common.xpath(driver, '//*[@id="droplist-11"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div', '//*[@id="droplist-11"]/ul' )
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
     except Exception as e:
         console.log('***Media type settings takes too much time to complete.***')
@@ -364,8 +364,8 @@ def output(driver):
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div', '//*[@id="droplist-11"]/ul' )
         common.xpath(driver, '//*[@id="droplist-12"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-12"]/button/div', '//*[@id="droplist-12"]/ul' )
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
+        
     except Exception as e:
         console.log('***Output settings takes too much time to complete.***')
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-hide-btn"]').click()
@@ -381,9 +381,9 @@ def output_default(driver):
         eco_print = common.xpath(driver, '//*[@id="droplist-11"]/button/div').text
         
         if(eco_print == "On"):
-            change_input(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[2]/div/div/input', 1, 5)
+            range = get_range(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[2]/div/ul/li/span[2]')
+            change_input(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[2]/div/div/input', range[0], range[1])
             
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
         
     except Exception as e:
@@ -397,11 +397,10 @@ def power_off(driver):
     try:
         common.xpath(driver, '//*[@id="droplist-11"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div', '//*[@id="droplist-11"]/ul')
-        time.sleep(3)
         common.xpath(driver, '//*[@id="droplist-12"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-12"]/button/div', '//*[@id="droplist-12"]/ul')
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
+
     except Exception as e:
         console.log('***Power off settings takes too much time to complete.***')
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-hide-btn"]').click()
@@ -413,9 +412,10 @@ def scan(driver):
     try:
         common.xpath(driver, '//*[@id="droplist-12"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-12"]/button/div', '//*[@id="droplist-12"]/ul')
-        change_input(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[6]/div/div/input', 1, 5)
-        time.sleep(3)
+        range = get_range(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[6]/div/ul/li/span[2]')
+        change_input(driver, '//*[@id="device-setting-single-edit4"]/table/tbody/tr[2]/td/div/ul/li[6]/div/div/input', range[0], range[1])
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
+
     except Exception as e:
         console.log('***Scan process takes too long to complete.***')
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-hide-btn"]').click()
@@ -425,18 +425,15 @@ def scan(driver):
         
 def security(driver):
     try:
-        time.sleep(60)
         common.xpath(driver, '//*[@id="droplist-11"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div', '//*[@id="droplist-11"]/ul')
-        time.sleep(3)
-
+        
         common.xpath(driver, '//*[@id="droplist-12"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-12"]/button/div', '//*[@id="droplist-12"]/ul')
-        time.sleep(3)    
         
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
         common.xpath(driver, '//*[@id="confirm-restart-dialog-ok-btn"]').click()
-        time.sleep(60)
+        
     except Exception as e:
         console.log('***Security settings takes too much time to complete.***')
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-hide-btn"]').click()
@@ -450,8 +447,9 @@ def sleep_level(driver):
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div', '//*[@id="droplist-11"]/ul' )
         common.xpath(driver, '//*[@id="droplist-13"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-13"]/button/div', '//*[@id="droplist-13"]/ul' )
-        time.sleep(3)
+        
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
+
     except Exception as e:
         console.log('***Sleep level settings takes too much time to complete.***')
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-hide-btn"]').click()
@@ -465,7 +463,6 @@ def weekly_timer(driver):
         dropdown_selection(driver, '//*[@id="droplist-11"]/button/div', '//*[@id="droplist-11"]/ul' )
         common.xpath(driver, '//*[@id="droplist-12"]/button').click()
         dropdown_selection(driver, '//*[@id="droplist-12"]/button/div', '//*[@id="droplist-12"]/ul' )
-        time.sleep(3)
         common.xpath(driver, '//*[@id="set-device-config-wizard-modal-next-btn"]').click()
     except Exception as e:
         console.log('***Weekly timer settings takes too much time to complete.***')
