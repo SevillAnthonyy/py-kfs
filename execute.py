@@ -9,6 +9,7 @@ from lib import common
 from lib.kfs import kfs
 
 print("Press Ctrl-C on the command line to terminate the autotest \n\n")
+
 instance = common.setup(enum.settings)
 kfs = kfs(instance)
 try:
@@ -20,7 +21,7 @@ try:
 
         #kfs.backupdata_import()
         #kfs.panel_note()
-        
+   
         #kfs.fwupdate()
         #kfs.restart_network()
         #kfs.restart_device()
@@ -57,19 +58,24 @@ try:
         
         
         #kfs.device_settings(enum.COMMON)
-        #kfs.device_settings(enum.COPY_DENSITY)
+        kfs.device_settings(enum.COPY_DENSITY)
+        #kfs.device_settings(enum.SCAN)
+        #kfs.device_settings(enum.OUTPUT_DEFAULT)
+
 
         ###### Until here.
         ###### END Main execution
+    
+
 except KeyboardInterrupt:
     console.log("Terminated")
-    pass
+    input('Press any key to exit...')
+    instance.quit()
 
+except Exception as e:
+    console.log("Exception has occured!")
+    console.log(e)
+    console.log("Refreshing....")
+    instance.refresh()
 
-input('Press any key to exit...')
-instance.quit()
-
-
-
-    
 
