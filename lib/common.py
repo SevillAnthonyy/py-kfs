@@ -47,6 +47,10 @@ def setup(settings):
     console.log('Setting up autotest...')
     if(settings['BROWSER'] == 1):
         driver = webdriver.Chrome()
+        #An implicit wait tells WebDriver to poll the DOM for a certain amount of time when trying to find
+        #any element (or elements) not immediately available. The default setting is 0 (zero).
+        #Once set, the implicit wait is set for the life of the WebDriver object.
+        driver.implicitly_wait(20) # seconds
         console.log('Running in Chrome browser')
     elif(settings['BROWSER'] == 2):
         driver = webdriver.Firefox()
@@ -69,21 +73,26 @@ def statusReady(driver):
     while(1):
         try:
             status = xpath(driver, '//*[@id="device-list-table-body"]/tr/td[4]/div/span[2]').text
-        except NoSuchWindowException as e:
+        #except NoSuchWindowException as e:
+        except Exception as e:
             # Aw snap occured, browser crashed. recover page
+            console.log(e) #For debug only
             driver.refresh()
             time.sleep(10)
+            pass
+            continue
         if(count == 7200):
             console.log('Error timeout! already 120 mins has passed and the device is not in Ready status')
             exit()
             
-        if(status == 'Offline' or status == 'Error'):
+        #if(status == 'Offline' or status == 'Error'):
+        if(status == 'Offline'):
             #xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[3]/a').click()
             console.log('Status is in '+status+'. Refreshing...')
             driver.refresh()
             #time.sleep(5)
         else:
-            console.log('Device status: '+status)
+            console.log('Device: '+status)
             time.sleep(3)
             #Select device
             xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[4]/div/table/tbody/tr/td[1]').click()
@@ -126,17 +135,27 @@ def inProgress(driver, xpath_status, xpath_detail):
     return status
 
 def isLoading(driver, xpath):
-    WebDriverWait(driver, SHORT_TIMEOUT
-        ).until(EC.presence_of_element_located((By.XPATH, xpath)))
+    while True:
+        element = WebDriverWait(driver, 5)\
+                    .until(EC.presence_of_element_located((By.XPATH, xpath)))
+        value = element.get_attribute('style')
+        if(value != 'display: block;'):
+            #TODO: If unable to retrieve device settings will occur condition handling here...
+            break
 
-    # then wait for the element to disappear
-    WebDriverWait(driver, LONG_TIMEOUT
-        ).until_not(EC.presence_of_element_located((By.XPATH, xpath)))
+        time.sleep(2)
 
 
 def wait(driver, xpath):
     element = WebDriverWait(driver, 60)\
-                .until(EC.element_to_be_clickable((By.XPATH, xpath)))
+                .until(EC.presence_of_element_located((By.XPATH, xpath)))
+    
+    WebDriverWait(driver, 60)\
+        .until(EC.visibility_of_element_located((By.XPATH, xpath)))
+    
+    WebDriverWait(driver, 60)\
+        .until(EC.element_to_be_clickable((By.XPATH, xpath)))
+    
     return element
 
 def xpath(driver, xpath):

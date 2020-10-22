@@ -44,7 +44,7 @@ def execute(driver, count):
     ret = common.inProgress(driver, status, detail)
     #TODO: NEED TO FILTER OTHER STATUS TEXTS for continuous testing.
     common.xpath(driver, '//*[@id="progress-modal-close-btn"]').click()
-    
+    return ret 
 
 #Special case Page 1 / 5
 def isSelected(driver, index):

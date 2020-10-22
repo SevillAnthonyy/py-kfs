@@ -22,12 +22,17 @@ def execute(driver, count):
     common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/a').click()
     common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/div/ul/li[9]/a').click()
     common.xpath(driver, '/html/body/div[1]/div[1]/div/div/div/div[2]/div/div[3]/div/ul/li[1]/div/ul/li[9]/div/ul/li[1]/a').click()
+
+    # Customer scenario. Uncheck system
+    common.xpath(driver, '/html/body/div[6]/div/div[2]/div[1]/div[1]/div/table/tbody/tr[2]/td/check-group/ul/li[8]/label/span[1]').click()
     
     # 1 / 3
     common.xpath(driver, '//*[@id="import-data-browse-proxy"]').click()
-    time.sleep(2)
-    pyautogui.write('IMPORT_FILE', interval=0.1)
+    time.sleep(3)
+    pyautogui.write('IMPORT_FILE.zip', interval=0.1)
+    time.sleep(1)
     pyautogui.press('enter')
+    time.sleep(1)
 
     try:
         common.xpath(driver, '//*[@id="import-data-wizard-next-btn"]').click()

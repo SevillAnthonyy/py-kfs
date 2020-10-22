@@ -45,16 +45,10 @@ def execute(driver, count, mode, mm_type):
 
     #next
     common.xpath(driver, '//*[@id="maintenance-mode-wizard-modal-next-btn"]').click()
-    
-    # 2 / 5
-    try:
-        config_text = common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div/button/span[1]').text
-    except TimeoutException as e:
-        #Error timeout, stuck at processing. Page 1/5 of Maintenance mode
-        console.log('ERR!! Stuck at processing. Page 1/5 of Maintenance mode')
-        pass
-        return
-    
+    console.log('Retrieving maintenance mode...')
+    common.isLoading(driver, '/html/body/div[10]')
+
+    config_text = common.xpath(driver, '/html/body/div[5]/div/div[2]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[1]/div/div/button/span[1]').text
     if(config_text != 'No further configuration is required.'):
         common.xpath(driver, '//*[@id="maintenance-mode-settings-dropdown"]/button').click()
         common.xpath(driver, '//*[@id="maintenance-mode-settings-dropdown"]/ul/li[2]').click()                      
@@ -66,7 +60,7 @@ def execute(driver, count, mode, mm_type):
                 break
     #next
     common.xpath(driver, '//*[@id="maintenance-mode-wizard-modal-next-btn"]').click()
-
+    
     # 3 / 5
     common.xpath(driver, '//*[@id="maintenance-mode-retry-chckbx"]/span[1]').click()
     common.xpath(driver, '//*[@id="maintenance-mode-wizard-modal-next-btn"]').click()
@@ -76,7 +70,7 @@ def execute(driver, count, mode, mm_type):
     taskname.send_keys('RMNT Autotest: count = '+ str(count), Keys.ARROW_DOWN)
     #next
     common.xpath(driver, '//*[@id="maintenance-mode-wizard-modal-next-btn"]').click()
-
+    
     # 5 / 5 : Summary page
     val = common.xpath(driver, '//*[@id="maintenance-mode-wizard-modal-next-btn"]').text
     common.xpath(driver, '//*[@id="maintenance-mode-wizard-modal-next-btn"]').click()

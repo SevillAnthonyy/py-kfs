@@ -22,7 +22,7 @@ class kfs:
 
     def snapshots(self):
         console.log('> Executing snapshots')
-        snapshots_.execute(self.driver, self.count)
+        status = snapshots_.execute(self.driver, self.count)
 
     def restart_device(self):
         console.log('> Executing device restart')
@@ -41,7 +41,7 @@ class kfs:
         fwupdate_.execute(self.driver, self.count)
 
     def mnt_mode(self, mode, mm_type):
-        console.log('> Executing maintenance mode')
+        console.log('> Executing '+ mode)
         mnt_mode_.execute(self.driver, self.count, mode, mm_type)
 
     def mnt_adjustment(self, mode):

@@ -34,10 +34,10 @@ try:
         #kfs.mnt_mode(enum.U147, enum.TYPE_SETTING)
         #kfs.mnt_mode(enum.U148, enum.TYPE_SETTING)
         kfs.mnt_mode(enum.U250, enum.TYPE_SETTING)
-        #kfs.mnt_mode(enum.U251, enum.TYPE_SETTING)
-        #kfs.mnt_mode(enum.U326, enum.TYPE_SETTING)
+        kfs.mnt_mode(enum.U251, enum.TYPE_SETTING)
+        kfs.mnt_mode(enum.U326, enum.TYPE_SETTING)
         #kfs.mnt_mode(enum.U327, enum.TYPE_SETTING)
-        #kfs.mnt_mode(enum.U332, enum.TYPE_SETTING)
+        kfs.mnt_mode(enum.U332, enum.TYPE_SETTING)
         #kfs.mnt_mode(enum.U464, enum.TYPE_ACTION)
         #kfs.mnt_mode(enum.U464, enum.TYPE_SETTING)
         #kfs.mnt_mode(enum.U474, enum.TYPE_ACTION)
@@ -45,9 +45,9 @@ try:
         
         #kfs.mnt_mode(enum.U601, enum.TYPE_ACTION)
         #kfs.mnt_mode(enum.U605, enum.TYPE_ACTION)
-        #kfs.mnt_mode(enum.U903, enum.TYPE_ACTION)
-        #kfs.mnt_mode(enum.U904, enum.TYPE_ACTION)
-        #kfs.mnt_mode(enum.U910, enum.TYPE_ACTION)
+        kfs.mnt_mode(enum.U903, enum.TYPE_ACTION)
+        kfs.mnt_mode(enum.U904, enum.TYPE_ACTION)
+        kfs.mnt_mode(enum.U910, enum.TYPE_ACTION)
         
         
         ##Maintenance mode adjustment settings
